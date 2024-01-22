@@ -39,7 +39,7 @@ jobs:
       with:
         serviceAccountJson: service_account.json
         packageName: boostcamp.and07.mindsync
-        releaseFile: app/build/outputs/bundle/release/app-release.aab
+        releaseFile: AOS/app/build/outputs/bundle/release/app-release.aab
         track: Internal
         whatsNewDirectory: distribution/
   
