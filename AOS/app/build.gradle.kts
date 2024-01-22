@@ -1,5 +1,5 @@
 import java.util.Properties
-
+import java.io.FileInputStream
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -7,8 +7,11 @@ plugins {
     kotlin("kapt")
     id("com.google.dagger.hilt.android")
     id("kotlinx-serialization")
+    id("com.google.gms.google-services")
 }
-
+val keystorePropertiesFile = rootProject.file("keystore.properties")
+val keystoreProperties = Properties()
+keystoreProperties.load(FileInputStream(keystorePropertiesFile))
 android {
     namespace = "boostcamp.and07.mindsync"
     compileSdk = 34
@@ -25,22 +28,31 @@ android {
         applicationId = "boostcamp.and07.mindsync"
         minSdk = 26
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
-
+        versionCode = 8
+        versionName = "1.0.1"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "BASE_URL", "$url")
         buildConfigField("String", "GOOGLE_SERVER_CLIENT_ID", "$googleServerClientId")
         buildConfigField("String", "KAKAO_CLIENT_ID", "$kakaoClientId")
         manifestPlaceholders["KAKAO_CLIENT_ID"] = removeQuotationKakaoClientId
     }
+
+    signingConfigs {
+        create("release") {
+            keyAlias = keystoreProperties["keyAlias"] as String
+            keyPassword = keystoreProperties["keyPassword"] as String
+            storeFile = file(keystoreProperties["storeFile"] as String)
+            storePassword = keystoreProperties["storePassword"] as String
+        }
+    }
     buildTypes {
-        release {
+        getByName("release") {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
+            signingConfig = signingConfigs.getByName("release")
         }
     }
     buildFeatures {
