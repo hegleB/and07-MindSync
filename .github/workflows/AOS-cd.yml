@@ -18,11 +18,9 @@ jobs:
       env:
         RELEASE_KEYSTORE: ${{ secrets.KEY_STORE_BASE_64 }}
         KEYSTORE_PROPERTIES: ${{ secrets.KEYSTORE_PROPERTIES }}
-        LOCAL_PROPERTIES: ${{ secrets.LOCAL_PROPERTIES }}
       run: |
           echo "$RELEASE_KEYSTORE" | base64 -d > AOS/app/release.keystore
           echo "$KEYSTORE_PROPERTIES" > AOS/keystore.properties
-          echo "$LOCAL_PROPERTIES" > AOS/local.properties
 
     - name: Build Release AAB
       run: ./gradlew bundleRelease
