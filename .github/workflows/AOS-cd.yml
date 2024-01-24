@@ -13,11 +13,6 @@ jobs:
         with:
           distribution: 'corretto'
           java-version: 17
-        
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
       - name: Create Properties File
         env:
           RELEASE_KEYSTORE: ${{ secrets.KEY_STORE_BASE_64 }}
@@ -34,7 +29,10 @@ jobs:
       - name: Build Release AAB
         run: ./gradlew bundleRelease
         working-directory: ./AOS
-  
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
       - name: Create service_account.json
         run: echo '${{ secrets.GOOGLE_PLAY_STORE_SERVICE_ACCOUT }}' > service_account.json
   
