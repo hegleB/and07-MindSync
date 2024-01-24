@@ -15,10 +15,6 @@ jobs:
         with:
           distribution: 'corretto'
           java-version: 17
-          
-      - name: Extract Release Version
-        run: echo "##[set-output name=version;]$(echo '${{ github.event.head_commit.message }}' | egrep -o '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')"
-        id: extract_version_name
 
       - name: Create Properties File
         env:
@@ -30,13 +26,10 @@ jobs:
             echo "$KEYSTORE_PROPERTIES" > AOS/keystore.properties
             echo "$LOCAL_PROPERTIES" > AOS/local.properties
 
-      - name: Create google-services.json
-        run: echo '${{ secrets.GOOGLE_SERVICES_JSON }}' > AOS/app/google-services.json
-
       - name: Build Release AAB
         run: ./gradlew bundleRelease
         working-directory: ./AOS
-
+      
       - name: Upload AAB
         uses: actions/upload-artifact@v2
         with:
@@ -55,16 +48,6 @@ jobs:
 
       - name: Create service_account.json
         run: echo '${{ secrets.GOOGLE_PLAY_STORE_SERVICE_ACCOUT }}' > service_account.json
-        
-      - name: Create Release 
-        uses: actions/create-release@v1
-        env: 
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with: 
-          tag_name: ${{ steps.extract_version_name.outputs.version }} 
-          release_name: ${{ steps.extract_version_name.outputs.version }}     
-          files: |
-              AOS/app/build/outputs/bundle/release/app-release.aab
               
       - name: Deploy to Internal
         uses: r0adkll/upload-google-play@v1
@@ -73,4 +56,4 @@ jobs:
           packageName: boostcamp.and07.mindsync
           releaseFiles: AOS/app/build/outputs/bundle/release/app-release.aab
           track: internal
-          whatsNewDirectory: AOS/whatsnew-ko-KR
+          whatsNewDirectory: AOS/whatsNewDirectory
