@@ -7,39 +7,43 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4 
-    - name: Set up JDK 17
-      uses: actions/setup-java@v3
-      with:
-        distribution: 'corretto'
-        java-version: 17
+      - uses: actions/checkout@v4 
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'corretto'
+          java-version: 17
         
-    - name: Create Properties File
-      env:
-        RELEASE_KEYSTORE: ${{ secrets.KEY_STORE_BASE_64 }}
-        KEYSTORE_PROPERTIES: ${{ secrets.KEYSTORE_PROPERTIES }}
-        LOCAL_PROPERTIES: ${{ secrets.LOCAL_PROPERTIES }}
-
-      run: |
-          echo "$RELEASE_KEYSTORE" | base64 -d > AOS/app/mindsync_keystore
-          echo "$KEYSTORE_PROPERTIES" > AOS/keystore.properties
-          echo "$LOCAL_PROPERTIES" > AOS/local.properties
-    - name: Create google-services.json
-      run: echo '${{ secrets.GOOGLE_SERVICES_JSON }}' > AOS/app/google-services.json
-      
-    - name: Build Release AAB
-      run: ./gradlew bundleRelease
-      working-directory: ./AOS
-
-    - name: Create service_account.json
-      run: echo '${{ secrets.GOOGLE_PLAY_STORE_SERVICE_ACCOUT }}' > service_account.json
-
-    - name: Deploy to Internal
-      uses: r0adkll/upload-google-play@v1
-      with:
-        serviceAccountJson: service_account.json
-        packageName: boostcamp.and07.mindsync
-        releaseFiles: AOS/app/build/outputs/bundle/release/app-release.aab
-        track: internal
-        whatsNewDirectory: distribution/
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create Properties File
+        env:
+          RELEASE_KEYSTORE: ${{ secrets.KEY_STORE_BASE_64 }}
+          KEYSTORE_PROPERTIES: ${{ secrets.KEYSTORE_PROPERTIES }}
+          LOCAL_PROPERTIES: ${{ secrets.LOCAL_PROPERTIES }}
+  
+        run: |
+            echo "$RELEASE_KEYSTORE" | base64 -d > AOS/app/mindsync_keystore
+            echo "$KEYSTORE_PROPERTIES" > AOS/keystore.properties
+            echo "$LOCAL_PROPERTIES" > AOS/local.properties
+      - name: Create google-services.json
+        run: echo '${{ secrets.GOOGLE_SERVICES_JSON }}' > AOS/app/google-services.json
+        
+      - name: Build Release AAB
+        run: ./gradlew bundleRelease
+        working-directory: ./AOS
+  
+      - name: Create service_account.json
+        run: echo '${{ secrets.GOOGLE_PLAY_STORE_SERVICE_ACCOUT }}' > service_account.json
+  
+      - name: Deploy to Internal
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJson: service_account.json
+          packageName: boostcamp.and07.mindsync
+          releaseFiles: AOS/app/build/outputs/bundle/release/app-release.aab
+          track: internal
+          whatsNewDirectory: distribution/
   
