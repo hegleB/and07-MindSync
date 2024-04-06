@@ -57,6 +57,7 @@ import boostcamp.and07.mindsync.ui.theme.Red2
 import coil.compose.AsyncImage
 import kotlinx.coroutines.flow.collectLatest
 
+
 @Composable
 fun ProfileScreen(
     profileViewModel: ProfileViewModel,
