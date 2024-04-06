@@ -13,8 +13,8 @@ android {
     namespace = "boostcamp.and07.mindsync"
     compileSdk = 34
 
-    val properties = Properties()
-    properties.load(project.rootProject.file("local.properties").inputStream())
+//    val properties = Properties()
+//    properties.load(project.rootProject.file("local.properties").inputStream())
     val url = properties["BASE_URL"] ?: ""
     val googleServerClientId = properties["GOOGLE_SERVER_CLIENT_ID"] ?: ""
     val kakaoClientId = properties["KAKAO_CLIENT_ID"] ?: ""
