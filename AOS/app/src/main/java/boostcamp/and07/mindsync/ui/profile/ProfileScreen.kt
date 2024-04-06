@@ -82,9 +82,10 @@ fun ProfileScreen(
         },
     ) { innerPadding ->
         BoxWithConstraints(
-            modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxWidth(),
+            modifier =
+                Modifier
+                    .padding(innerPadding)
+                    .fillMaxWidth(),
         ) {
             val guidelineTop = maxHeight * 0.15f
             val guidelineStart = maxWidth * 0.1f
@@ -125,10 +126,11 @@ private fun HandleProfileEvents(
             when (event) {
                 is ProfileUiEvent.NavigateToBack -> onBack()
 
-                is ProfileUiEvent.ShowMessage -> snackBarHostState.showSnackbar(
-                    message = event.message,
-                    duration = SnackbarDuration.Short,
-                )
+                is ProfileUiEvent.ShowMessage ->
+                    snackBarHostState.showSnackbar(
+                        message = event.message,
+                        duration = SnackbarDuration.Short,
+                    )
 
                 is ProfileUiEvent.UpdateProfileNickName -> nicknameColor.value = Blue1
             }
@@ -150,20 +152,23 @@ private fun ProfileContent(
 ) {
     ProfileTopAppBar { profileViewModel.onClickBack() }
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(top = guidelineTop),
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .padding(top = guidelineTop),
     ) {
         ProfileImage(
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally),
+            modifier =
+                Modifier
+                    .align(Alignment.CenterHorizontally),
             imageUri = uiState.imageUri,
             showImagePicker = showImagePicker,
         )
 
         Row(
-            modifier = Modifier
-                .padding(top = 16.dp),
+            modifier =
+                Modifier
+                    .padding(top = 16.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Spacer(modifier = Modifier.weight(1f))
@@ -180,13 +185,14 @@ private fun ProfileContent(
         }
 
         ModifyButton(
-            modifier = Modifier
-                .padding(
-                    top = 30.dp,
-                    start = guidelineStart,
-                    end = guidelineEnd,
-                )
-                .fillMaxWidth(),
+            modifier =
+                Modifier
+                    .padding(
+                        top = 30.dp,
+                        start = guidelineStart,
+                        end = guidelineEnd,
+                    )
+                    .fillMaxWidth(),
             profileImageName = stringResource(id = R.string.profile_image_name),
             updateProfile = updateProfile,
             isModify = uiState.isModify,
@@ -195,9 +201,7 @@ private fun ProfileContent(
 }
 
 @Composable
-private fun ProfileTopAppBar(
-    onBack: () -> Unit,
-) {
+private fun ProfileTopAppBar(onBack: () -> Unit) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -212,8 +216,9 @@ private fun ProfileTopAppBar(
         Text(
             text = stringResource(id = R.string.profile_my_page),
             style = MaterialTheme.typography.displayMedium,
-            modifier = Modifier
-                .padding(start = 14.dp),
+            modifier =
+                Modifier
+                    .padding(start = 14.dp),
         )
     }
 }
@@ -225,28 +230,31 @@ private fun ProfileImage(
     showImagePicker: () -> Unit,
 ) {
     Box(
-        modifier = modifier
-            .size(120.dp),
+        modifier =
+            modifier
+                .size(120.dp),
     ) {
         AsyncImage(
             model = imageUri,
             contentDescription = null,
-            modifier = Modifier
-                .clip(CircleShape)
-                .clickable {
-                    showImagePicker()
-                },
+            modifier =
+                Modifier
+                    .clip(CircleShape)
+                    .clickable {
+                        showImagePicker()
+                    },
             contentScale = ContentScale.Crop,
         )
 
         Box(
             contentAlignment = Alignment.Center,
-            modifier = Modifier
-                .size(30.dp)
-                .offset(y = 10.dp)
-                .clip(shape = RoundedCornerShape(5.dp))
-                .background(color = Blue1)
-                .align(Alignment.TopEnd),
+            modifier =
+                Modifier
+                    .size(30.dp)
+                    .offset(y = 10.dp)
+                    .clip(shape = RoundedCornerShape(5.dp))
+                    .background(color = Blue1)
+                    .align(Alignment.TopEnd),
         ) {
             Image(
                 painter = painterResource(id = R.drawable.ic_add_board),
@@ -300,10 +308,11 @@ private fun ModifyButton(
     Button(
         onClick = { updateProfile(profileImageName) },
         modifier = modifier,
-        colors = ButtonDefaults.buttonColors(
-            containerColor = Red2,
-            disabledContainerColor = Gray3,
-        ),
+        colors =
+            ButtonDefaults.buttonColors(
+                containerColor = Red2,
+                disabledContainerColor = Gray3,
+            ),
         enabled = isModify,
     ) {
         Text(
